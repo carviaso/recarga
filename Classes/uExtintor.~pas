@@ -1,0 +1,35 @@
+unit uExtintor;
+
+interface
+
+uses
+  uTipoExtintor, SysUtils, uTipos;
+
+type
+  TExtintor = Class
+  private
+    id : integer;
+    tipo : TTipoExtintor;
+    capacidade : integer;
+    anoFabricacao : integer;
+    fabricante : TFabricante;
+    numeroSerie : string;
+    tara : double;
+    numeroProjeto : string;
+
+    ultimaVisita : TDateTime;
+    selo : string;
+    nivelManutencao : TNivelManutencao;
+    pintura : boolean;
+    pesoCheio : double;
+    pesoVazio : double;
+    et : double;
+    ep : double;
+
+  public
+
+
+  end;
+implementation
+
+end.
