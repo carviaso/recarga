@@ -1,0 +1,23 @@
+object FPai: TFPai
+  Left = 253
+  Top = 211
+  Width = 547
+  Height = 389
+  BorderStyle = bsSizeToolWin
+  Caption = 'FPai'
+  Color = clBtnFace
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Arial'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+end
