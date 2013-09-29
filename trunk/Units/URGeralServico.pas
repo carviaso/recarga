@@ -196,6 +196,7 @@ type
     rlRsCubagem: TRLLabel;
     RLImage1: TRLImage;
     RLLabel45: TRLLabel;
+    rlblCNPJ: TRLLabel;
     procedure RLLabel36BeforePrint(Sender: TObject; var Text: String;
       var PrintIt: Boolean);
     procedure RLDBText1BeforePrint(Sender: TObject; var Text: String;
@@ -280,11 +281,13 @@ end;
 procedure TFRGeralServico.RLImage1BeforePrint(Sender: TObject;
   var PrintIt: Boolean);
 begin
-
-  PrintIt := DMPesquisa.cdsEmpresa.FieldByName('ASSINAR_DIGITALMENTE').AsString = 'S';
-  if PrintIt then
-    RLImage1.Picture.LoadFromFile(DMPesquisa.cdsEmpresa.FieldByName('LOCAL_ASINATURA').AsString);
-
+  try
+    PrintIt := DMPesquisa.cdsEmpresa.FieldByName('ASSINAR_DIGITALMENTE').AsString = 'S';
+    if PrintIt then
+      RLImage1.Picture.LoadFromFile(DMPesquisa.cdsEmpresa.FieldByName('LOCAL_ASINATURA').AsString);
+  except
+    ShowMessage('Arquivo não encontrado!');
+  end;
 end;
 
 

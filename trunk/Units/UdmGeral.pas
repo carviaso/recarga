@@ -14,6 +14,7 @@ type
     QRGS: TIBQuery;
     QExtintor: TIBQuery;
     tbItensRecarga: TIBTable;
+    Qry: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

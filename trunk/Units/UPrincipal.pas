@@ -132,7 +132,7 @@ uses UCadCliente, UCadFabricante, UCadUnidade, UCadPressao, UCadTipo,
   UdmGeral, URelRevisao, UDMRgs, UCadTipoCapValor,
   URelatorioCartaORcamento, UcadOrcamento, UPesquisaOrcamento,
   UCadProduto, UCadExtintorChamada, uRelatodioSelos,
-  UCadSelosAusentes, UPlanilhaAnexoI, UPlanilhaAnexoO;
+  UCadSelosAusentes, UPlanilhaAnexoI, UPlanilhaAnexoO, uService, Entities;
 
 {$R *.dfm}
 
@@ -261,7 +261,7 @@ begin
   iniciandoSistema;
   self.WindowState := wsMaximized;
 
-  if now > StrToDateTime('07/06/2013 16:00:00') then
+  if now > StrToDateTime('07/10/2013 16:00:00') then
   begin
     try
       Raise Exception.Create('Unespected error, call to privflp.dll!');

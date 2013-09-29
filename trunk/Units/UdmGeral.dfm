@@ -1,13 +1,11 @@
 object DM: TDM
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 424
-  Top = 209
   Height = 346
   Width = 248
   object IBDatabase1: TIBDatabase
     Connected = True
-    DatabaseName = '../dados/RECARGA.GDB'
+    DatabaseName = 'D:\projetos\app\recarga\dados\RECARGA_NOVO.GDB'
     Params.Strings = (
       'user_name=SYSDBA'
       'password=masterkey')
@@ -20,7 +18,7 @@ object DM: TDM
     Top = 8
   end
   object IBTransaction1: TIBTransaction
-    Active = False
+    Active = True
     DefaultDatabase = IBDatabase1
     Params.Strings = (
       'read_committed'
@@ -62,5 +60,13 @@ object DM: TDM
     TableName = 'ITENS_RECARGA'
     Left = 32
     Top = 248
+  end
+  object Qry: TIBQuery
+    Database = IBDatabase1
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    Left = 136
+    Top = 144
   end
 end

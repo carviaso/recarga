@@ -1,6 +1,6 @@
 inherited FCadRgs: TFCadRgs
-  Left = 235
-  Top = 89
+  Left = 221
+  Top = 133
   Width = 786
   Height = 534
   Caption = 'Cadastro de RGS'
@@ -34,7 +34,7 @@ inherited FCadRgs: TFCadRgs
   end
   inherited pnControle: TPanel
     Left = 671
-    Height = 481
+    Height = 477
     inherited btnFechar: TBitBtn
       Top = 424
       TabOrder = 15
@@ -156,12 +156,12 @@ inherited FCadRgs: TFCadRgs
     end
   end
   inherited BarraDeStatus: TStatusBar
-    Top = 481
+    Top = 477
     Width = 778
   end
   inherited PageControl: TPageControl
     Width = 671
-    Height = 481
+    Height = 477
     ActivePage = tabCadastro
     inherited tabPesquisa: TTabSheet
       inherited dbgCadastro: TDBGrid
@@ -309,6 +309,7 @@ inherited FCadRgs: TFCadRgs
           Caption = 'RGS'
           Checked = True
           TabOrder = 10
+          TabStop = True
           Visible = False
         end
         object edPesquisaRgs: TEdit
@@ -588,6 +589,13 @@ inherited FCadRgs: TFCadRgs
         Font.Style = [fsBold]
         ParentFont = False
       end
+      object lbl1: TLabel
+        Left = 438
+        Top = 246
+        Width = 87
+        Height = 14
+        Caption = 'C'#243'digo de Barras:'
+      end
       object edDataEntrada: TDBDateEdit
         Left = 63
         Top = 17
@@ -618,7 +626,7 @@ inherited FCadRgs: TFCadRgs
         ParentCtl3D = False
         ParentFont = False
         PopupMenu = PopupMenu
-        TabOrder = 9
+        TabOrder = 10
         TitleFont.Charset = ANSI_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
@@ -800,7 +808,7 @@ inherited FCadRgs: TFCadRgs
       object dbgExtintorCliente: TDBGrid
         Left = 9
         Top = 121
-        Width = 641
+        Width = 640
         Height = 119
         TabStop = False
         Ctl3D = False
@@ -1172,6 +1180,16 @@ inherited FCadRgs: TFCadRgs
         DataSource = dsCadastro
         ParentCtl3D = False
         TabOrder = 6
+      end
+      object edtCodigoBarras: TEdit
+        Left = 529
+        Top = 243
+        Width = 120
+        Height = 20
+        Ctl3D = False
+        ParentCtl3D = False
+        TabOrder = 9
+        OnChange = edtCodigoBarrasChange
       end
     end
   end

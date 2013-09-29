@@ -54,6 +54,7 @@ type
     RadioButton1: TRadioButton;
     RLPDFFilter1: TRLPDFFilter;
     rgExibeSelo: TRadioGroup;
+    QpesquisaCODIGO_BARRA: TIBStringField;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure edClienteKeyPress(Sender: TObject; var Key: Char);
@@ -88,34 +89,35 @@ const
     '  RECARGA.PREV_SAIDA,'#10+
     '  RECARGA.SAIDA,'#10+
     '  RECARGA.RGS,'#10+
-    '  ESTINTOR.CODIGO,'#10+
-    '  ESTINTOR.CAPACIDADE,'#10+
-    '  ESTINTOR.ANO_FABRICACAO,'#10+
-    '  ESTINTOR.ULTIMA_VISITA,'#10+
-    '  ESTINTOR.NUMERO_SERIE,'#10+
-    '  ESTINTOR.NIVEL_MANUTENCAO,'#10+
-    '  ESTINTOR.SELO,'#10+
+    '  EXTINTOR.CODIGO,'#10+
+    '  EXTINTOR.CAPACIDADE,'#10+
+    '  EXTINTOR.ANO_FABRICACAO,'#10+
+    '  EXTINTOR.ULTIMA_VISITA,'#10+
+    '  EXTINTOR.NUMERO_SERIE,'#10+
+    '  EXTINTOR.NIVEL_MANUTENCAO,'#10+
+    '  EXTINTOR.SELO,'#10+
     '  TIPO.TIPO,'#10+
     '  TIPO.NBR,'#10+
-    '  ESTINTOR.PESO_VAZIO,'#10+
-    '  ESTINTOR.DATA_TESTE,'#10+
-    '  ESTINTOR.PESO_CHEIO,'#10+
-    '  ESTINTOR.TARA,'#10+
-    '  ESTINTOR.OBS,'#10+
-    '  ESTINTOR.NUMERO_PROJETO,'#10+
-    '  ESTINTOR.NUMERO_LACRE'#10+
+    '  EXTINTOR.PESO_VAZIO,'#10+
+    '  EXTINTOR.DATA_TESTE,'#10+
+    '  EXTINTOR.PESO_CHEIO,'#10+
+    '  EXTINTOR.TARA,'#10+
+    '  EXTINTOR.OBS,'#10+
+    '  EXTINTOR.NUMERO_PROJETO,'#10+
+    '  EXTINTOR.NUMERO_LACRE,'#10+
+    '  (SELECT ESTINTOR.CODIGO_BARRA FROM ESTINTOR WHERE ESTINTOR.CODIGO = EXTINTOR.CODIGO) as CODIGO_BARRA'#10+
     'FROM'#10+
-    '  ITENS_RECARGA ESTINTOR'#10+
-//  '  INNER JOIN RGS_EXTINTOR ON (RGS_EXTINTOR.CODIGO_EXTINTOR=ESTINTOR.CODIGO)'#10+
-    '  INNER JOIN RECARGA ON (ESTINTOR.RGS = RECARGA.RGS)'#10+
-    '  INNER JOIN FABRICANTE ON (ESTINTOR.FABRICANTE=FABRICANTE.CODIGO)'#10+
-    '  INNER JOIN CLIENTE ON (ESTINTOR.CLIENTE=CLIENTE.CODIGO)'#10+
-    '  INNER JOIN TIPO ON (ESTINTOR.TIPO=TIPO.CODIGO)'#10+
+    '  ITENS_RECARGA EXTINTOR'#10+
+//  '  INNER JOIN RGS_EXTINTOR ON (RGS_EXTINTOR.CODIGO_EXTINTOR=EXTINTOR.CODIGO)'#10+
+    '  INNER JOIN RECARGA ON (EXTINTOR.RGS = RECARGA.RGS)'#10+
+    '  INNER JOIN FABRICANTE ON (EXTINTOR.FABRICANTE=FABRICANTE.CODIGO)'#10+
+    '  INNER JOIN CLIENTE ON (EXTINTOR.CLIENTE=CLIENTE.CODIGO)'#10+
+    '  INNER JOIN TIPO ON (EXTINTOR.TIPO=TIPO.CODIGO)'#10+
     'WHERE'#10+
     '  (RECARGA.CLIENTE IS NOT NULL)%s'#10+
     'ORDER BY'#10+
     '  RECARGA.RGS,'#10+
-    '  ESTINTOR.NUMERO_SERIE';
+    '  EXTINTOR.NUMERO_SERIE';
 var
   filtro : string;
 begin
@@ -133,10 +135,10 @@ begin
     filtro := 'AND(RECARGA.CLIENTE = ' + VarToStr(dblCliente.KeyValue) + ')';
 
   if edExtintor.Text <> '' then
-    filtro := filtro + 'AND(ESTINTOR.NUMERO_SERIE = ''' + edExtintor.Text + ''')';
+    filtro := filtro + 'AND(EXTINTOR.NUMERO_SERIE = ''' + edExtintor.Text + ''')';
 
   if edCodExtintor.Text <> '' then
-    filtro := filtro + 'AND(ESTINTOR.CODIGO = ' + edCodExtintor.Text + ')';
+    filtro := filtro + 'AND(EXTINTOR.CODIGO = ' + edCodExtintor.Text + ')';
 
   if edRGS.Text <> '' then
     filtro := filtro + 'AND(RECARGA.RGS LIKE ''%' + edRGS.Text + '%'')';
@@ -190,7 +192,8 @@ begin
     FRelatorioEtiquetaResumida.Free;
     }
     Application.CreateForm(TFRelatorioEtiquetaTermica, FRelatorioEtiquetaTermica);
-    FRelatorioEtiquetaTermica.QuickRep1.Preview;
+    //FRelatorioEtiquetaTermica.QuickRep1.Preview;
+    FRelatorioEtiquetaTermica.RLReport1.PreviewModal;
     FRelatorioEtiquetaTermica.Free;
 
   end else if RadioButton1.Checked then begin

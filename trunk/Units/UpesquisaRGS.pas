@@ -321,6 +321,9 @@ begin
   FRGeralServico.rlEmpresa.Caption     := DMPesquisa.cdsEmpresa.FieldByName('FANTASIA').AsString;
   FRGeralServico.rlRespTecnico.Caption := DMPesquisa.cdsEmpresa.FieldByName('RESP_TECNICO').AsString;
   FRGeralServico.rlRespControle.Caption:= DMPesquisa.cdsEmpresa.FieldByName('RESP_CONTROLE_QULIDADE').AsString;
+  if Length( Trim(DMPesquisa.cdsEmpresa.FieldByName('CNPJ').AsString ) ) = 14 then
+    TCurrencyField(DMPesquisa.cdsEmpresa.FieldByName('CNPJ')).EditMask := '99.999.999/9999-99;0;_';
+  FRGeralServico.rlblCNPJ.Caption      := 'CNPJ: ' + DMPesquisa.cdsEmpresa.FieldByName('CNPJ').AsString;
   FRGeralServico.rlEndereco.Caption    := DMPesquisa.cdsEmpresa.FieldByName('ENDERECO').AsString + ' - ' +
                                           DMPesquisa.cdsEmpresa.FieldByName('BAIRRO').AsString   + ' - ' +
                                           DMPesquisa.cdsEmpresa.FieldByName('CIDADE').AsString   + '-'   +
@@ -511,6 +514,9 @@ begin
   FRRGSPecas.rlEmpresa.Caption        := DMPesquisa.cdsEmpresa.FieldByName('FANTASIA').AsString;
   FRRGSPecas.rlRespTecnico.Caption    := DMPesquisa.cdsEmpresa.FieldByName('RESP_TECNICO').AsString;
   FRRGSPecas.rlRespControle.Caption   := DMPesquisa.cdsEmpresa.FieldByName('RESP_CONTROLE_QULIDADE').AsString;
+  if Length( Trim(DMPesquisa.cdsEmpresa.FieldByName('CNPJ').AsString ) ) = 14 then
+    TCurrencyField(DMPesquisa.cdsEmpresa.FieldByName('CNPJ')).EditMask := '99.999.999/9999-99;0;_';
+  FRRGSPecas.rlblCNPJ.Caption         := 'CNPJ: ' + DMPesquisa.cdsEmpresa.FieldByName('CNPJ').AsString;
   FRRGSPecas.rlEndereco.Caption       := DMPesquisa.cdsEmpresa.FieldByName('ENDERECO').AsString + ' - ' +
                                          DMPesquisa.cdsEmpresa.FieldByName('BAIRRO').AsString   + ' - ' +
                                          DMPesquisa.cdsEmpresa.FieldByName('CIDADE').AsString   + '-'   +
