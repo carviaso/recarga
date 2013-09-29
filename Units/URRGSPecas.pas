@@ -112,6 +112,7 @@ type
     rlRepresentante: TRLLabel;
     RLImage1: TRLImage;
     RLLabel14: TRLLabel;
+    rlblCNPJ: TRLLabel;
     procedure RLDBText1BeforePrint(Sender: TObject; var Text: String;
       var PrintIt: Boolean);
     procedure RLImage1BeforePrint(Sender: TObject; var PrintIt: Boolean);

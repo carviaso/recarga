@@ -71,7 +71,7 @@ object FpesquisaRelGeraldeServico: TFpesquisaRelGeraldeServico
     Left = 429
     Top = 0
     Width = 118
-    Height = 316
+    Height = 312
     Align = alRight
     TabOrder = 4
     object BitBtn1: TBitBtn
@@ -164,7 +164,7 @@ object FpesquisaRelGeraldeServico: TFpesquisaRelGeraldeServico
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 316
+    Top = 312
     Width = 547
     Height = 19
     Panels = <
@@ -246,38 +246,38 @@ object FpesquisaRelGeraldeServico: TFpesquisaRelGeraldeServico
       '  RECARGA.PREV_SAIDA,'
       '  RECARGA.SAIDA,'
       '  RECARGA.RGS,'
-      '  ESTINTOR.CODIGO,'
-      '  ESTINTOR.CAPACIDADE,'
-      '  ESTINTOR.ANO_FABRICACAO,'
-      '  ESTINTOR.ULTIMA_VISITA,'
-      '  ESTINTOR.NUMERO_SERIE,'
-      '  ESTINTOR.NIVEL_MANUTENCAO,'
-      '  ESTINTOR.SELO,'
+      '  EXTINTOR.CODIGO,'
+      '  EXTINTOR.CAPACIDADE,'
+      '  EXTINTOR.ANO_FABRICACAO,'
+      '  EXTINTOR.ULTIMA_VISITA,'
+      '  EXTINTOR.NUMERO_SERIE,'
+      '  EXTINTOR.NIVEL_MANUTENCAO,'
+      '  EXTINTOR.SELO,'
       '  TIPO.TIPO,'
       '  TIPO.NBR,'
-      '  ESTINTOR.PESO_VAZIO,'
-      '  ESTINTOR.DATA_TESTE,'
-      '  ESTINTOR.PESO_CHEIO,'
-      '  ESTINTOR.TARA,'
-      '  ESTINTOR.OBS,'
-      '  ESTINTOR.NUMERO_PROJETO,'
-      '  ESTINTOR.NUMERO_LACRE'
+      '  EXTINTOR.PESO_VAZIO,'
+      '  EXTINTOR.DATA_TESTE,'
+      '  EXTINTOR.PESO_CHEIO,'
+      '  EXTINTOR.TARA,'
+      '  EXTINTOR.OBS,'
+      '  EXTINTOR.NUMERO_PROJETO,'
+      '  EXTINTOR.NUMERO_LACRE,'
+      
+        '  (SELECT ESTINTOR.CODIGO_BARRA FROM ESTINTOR WHERE ESTINTOR.COD' +
+        'IGO = EXTINTOR.CODIGO) as CODIGO_BARRA'
       'FROM'
-      '  RGS_EXTINTOR'
+      '  ITENS_RECARGA EXTINTOR'
+      '  INNER JOIN RECARGA ON (EXTINTOR.RGS = RECARGA.RGS)'
       
-        '  INNER JOIN ESTINTOR ON (RGS_EXTINTOR.CODIGO_EXTINTOR=ESTINTOR.' +
-        'CODIGO)'
-      '  INNER JOIN RECARGA ON (RGS_EXTINTOR.CODIGO_RGS=RECARGA.CODIGO)'
-      
-        '  INNER JOIN FABRICANTE ON (ESTINTOR.FABRICANTE=FABRICANTE.CODIG' +
+        '  INNER JOIN FABRICANTE ON (EXTINTOR.FABRICANTE=FABRICANTE.CODIG' +
         'O)'
-      '  INNER JOIN CLIENTE ON (ESTINTOR.CLIENTE=CLIENTE.CODIGO)'
-      '  INNER JOIN TIPO ON (ESTINTOR.TIPO=TIPO.CODIGO)'
+      '  INNER JOIN CLIENTE ON (EXTINTOR.CLIENTE=CLIENTE.CODIGO)'
+      '  INNER JOIN TIPO ON (EXTINTOR.TIPO=TIPO.CODIGO)'
       'WHERE'
-      '  (RECARGA.CLIENTE IS NOT NULL)AND(RECARGA.RGS LIKE '#39'%07-2021%'#39')'
+      '  (RECARGA.CLIENTE IS NOT NULL)AND(RECARGA.CLIENTE = 7775)'
       'ORDER BY'
       '  RECARGA.RGS,'
-      '  ESTINTOR.NUMERO_SERIE')
+      '  EXTINTOR.NUMERO_SERIE')
     Left = 24
     Top = 168
     object QpesquisaDESCRICAO: TIBStringField
@@ -384,6 +384,10 @@ object FpesquisaRelGeraldeServico: TFpesquisaRelGeraldeServico
     object QpesquisaNUMERO_LACRE: TIntegerField
       FieldName = 'NUMERO_LACRE'
       Origin = 'ESTINTOR.NUMERO_LACRE'
+    end
+    object QpesquisaCODIGO_BARRA: TIBStringField
+      FieldName = 'CODIGO_BARRA'
+      FixedChar = True
     end
   end
   object dsCliente: TDataSource

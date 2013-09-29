@@ -1,7 +1,5 @@
 unit UFsuper;
 
-
-
 interface
   Uses Dialogs, Controls, SqlExpr, SysUtils, IBQuery, forms, Classes, DBCtrls, windows, variants;
 

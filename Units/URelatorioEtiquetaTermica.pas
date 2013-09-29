@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, QRCtrls, QuickRpt, ExtCtrls;
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls, CIAXCOM, RLBarcode, DB, RLReport,
+  Grids, DBGrids;
 
 type
   TFRelatorioEtiquetaTermica = class(TForm)
@@ -35,6 +36,37 @@ type
     QRDBText13: TQRDBText;
     QRLabel15: TQRLabel;
     QRDBText10: TQRDBText;
+    QRDBText14: TQRDBText;
+    RLReport1: TRLReport;
+    dsRelatorio: TDataSource;
+    dbgrd1: TDBGrid;
+    RLBand1: TRLBand;
+    RLDBBarcode2: TRLDBBarcode;
+    RLDBText2: TRLDBText;
+    rlbl2: TRLLabel;
+    rlbl3: TRLLabel;
+    rlbl4: TRLLabel;
+    rlbl5: TRLLabel;
+    rlbl6: TRLLabel;
+    RLDBText3: TRLDBText;
+    RLDBText4: TRLDBText;
+    RLDBText5: TRLDBText;
+    RLDBText6: TRLDBText;
+    RLDBText7: TRLDBText;
+    rlbl1: TRLLabel;
+    rlbl7: TRLLabel;
+    rlbl8: TRLLabel;
+    rlbl9: TRLLabel;
+    rlbl10: TRLLabel;
+    RLDBText1: TRLDBText;
+    RLDBText8: TRLDBText;
+    RLDBText9: TRLDBText;
+    RLDBText10: TRLDBText;
+    RLDBText11: TRLDBText;
+    rlbl11: TRLLabel;
+    RLDBText12: TRLDBText;
+    rlbl12: TRLLabel;
+    RLDBText13: TRLDBText;
     procedure QRDBText6Print(sender: TObject; var Value: String);
     procedure QRDBText9Print(sender: TObject; var Value: String);
     procedure QRDBText8Print(sender: TObject; var Value: String);
@@ -42,6 +74,7 @@ type
     procedure QRDBText3Print(sender: TObject; var Value: String);
     procedure QRLabel23Print(sender: TObject; var Value: String);
     procedure QRDBText7Print(sender: TObject; var Value: String);
+    procedure QRDBText14Print(sender: TObject; var Value: String);
   private
     { Private declarations }
   public
@@ -102,6 +135,12 @@ begin
   // Omitir o número do selo na etiqueta, solicitado por Sérgio Filho em 08/2012
   if FpesquisaRelGeraldeServico.rgExibeSelo.ItemIndex = 1 then
     Value := '';
+end;
+
+procedure TFRelatorioEtiquetaTermica.QRDBText14Print(sender: TObject;
+  var Value: String);
+begin
+  Value := Barcode(PAnsiChar(Value), 'BarCodeType', 1);
 end;
 
 end.

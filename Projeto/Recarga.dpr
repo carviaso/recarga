@@ -79,7 +79,9 @@ uses
   uRelatodioSelosReport in '..\units\uRelatodioSelosReport.pas' {FRelatodioSelosReport},
   UCadSelosAusentes in '..\Units\UCadSelosAusentes.pas' {FCadSelosAusentes},
   UAnexoI in '..\Units\UAnexoI.pas',
-  UAnexoIItens in '..\Units\UAnexoIItens.pas';
+  UAnexoIItens in '..\Units\UAnexoIItens.pas',
+  uService in '..\Units\uService.pas',
+  Entities in '..\Units\Entities.pas';
 
 {$R *.res}
 
@@ -122,7 +124,7 @@ begin
   Application.CreateForm(TDMPesquisa, DMPesquisa);
   Application.CreateForm(TFPrincipal, FPrincipal);
   Application.CreateForm(TDMRgs, DMRgs);
-//  Application.CreateForm(TFPlanilhaAnexoI, FPlanilhaAnexoI);
+  //  Application.CreateForm(TFPlanilhaAnexoI, FPlanilhaAnexoI);
   Application.Run;
 
   end;

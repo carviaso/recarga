@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UCadastro, FMTBcd, SqlExpr, DB, DBClient, Provider, StdCtrls,
   Mask, ToolEdit, Grids, DBGrids, ComCtrls, Buttons, ExtCtrls, DBCtrls,
-  RXDBCtrl, Menus, IBTable, IBCustomDataSet, IBQuery, DBXpress;
+  RXDBCtrl, Menus, IBTable, IBCustomDataSet, IBQuery, DBXpress, uService;
 
 type
   TFCadRgs = class(TFCadastro)
@@ -80,6 +80,8 @@ type
     cdsItensRecarga: TIBTable;
     Label23: TLabel;
     DBEdit1: TDBEdit;
+    edtCodigoBarras: TEdit;
+    lbl1: TLabel;
     procedure edRgsKeyPress(Sender: TObject; var Key: Char);
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
@@ -132,8 +134,11 @@ type
     procedure dbgRGSColExit(Sender: TObject);
     procedure edCompetenciaKeyPress(Sender: TObject; var Key: Char);
     procedure edCompetenciaExit(Sender: TObject);
+    procedure edtCodigoBarrasChange(Sender: TObject);
   private
-    procedure InseriExtintor(codExtintor, codRgs:integer);
+    procedure InseriExtintor(codigo : integer);overload;
+    procedure InseriExtintor(codExtintor, codRgs:integer);overload;
+    procedure InseriExtintor(codBarras : string);overload;
     procedure RemoveExtintor(codExtintor, codRgs:integer);
     procedure ListaExtintores(codRgs:string);
     procedure montaRGS1;
@@ -167,9 +172,7 @@ const
   ctCodigo = 'SELECT MAX(CODIGO) FROM RECARGA';
   ctNRGS   = 'SELECT NRGS FROM EMPRESA';
   ctDelete = 'DELETE FROM RGS_EXTINTOR WHERE CODIGO_RGS = %s';
-//var
-//  n : integer;
-//  id : Pointer;
+
 begin
   qaux.close;
   qaux.SQL.clear;
@@ -185,12 +188,11 @@ begin
   edCompetencia.Field.AsString := FormatDateTime('mm/yyyy',Now);
 
   // garantindo que não ha estintores relacionados com a nova rgs
- if (dsCadastro.DataSet.State = dsInsert) and
+  if (dsCadastro.DataSet.State = dsInsert) and
      (dsCadastro.DataSet.FieldByName('CODIGO').AsVariant <> null) then
   begin
     execDml(Format(ctDelete,[dsCadastro.DataSet.FieldByName('CODIGO').AsString]));
   end;
-
 
   qaux.close;
   qaux.SQL.clear;
@@ -560,106 +562,8 @@ begin
 end;
 
 procedure TFCadRgs.dbgExtintorClienteDblClick(Sender: TObject);
-var
-  i : integer;
-  codExtintor : integer;
-Const
-  ctInsert =
-    'INSERT INTO'#10+
-    ' RGS_EXTINTOR'#10+
-    '    (RGS_EXTINTOR.CODIGO_EXTINTOR,'#10+
-    '     RGS_EXTINTOR.CODIGO_RGS)'#10+
-    'VALUES(%s,%s)';
-
-  ctDelete =
-    'DELETE FROM RGS_EXTINTOR'#10+
-    'WHERE'#10+
-    '(CODIGO_EXTINTOR = %s)AND(CODIGO_RGS = %s)';
-
-  ctSugereNilvel =
-    'UPDATE ESTINTOR SET NIVEL_MANUTENCAO = %s WHERE CODIGO = %s';
-
-  ctDataTeste =
-    'UPDATE ESTINTOR SET DATA_TESTE = NULL WHERE CODIGO = %s';
-
 begin
-  inherited;
-
-  if codRgs = '' then
-    exit;
-
-  codExtintor := dbgExtintorCliente.DataSource.DataSet.FieldByName('CODIGO').AsInteger;
-
-  if cdsItensRecarga.Locate('CODIGO',codExtintor, []) then
-    cdsItensRecarga.Delete
-  else begin
-
-    qaux.Close;
-    qaux.SQL.Clear;
-    qaux.SQL.add('SELECT ESTINTOR.* FROM ESTINTOR WHERE CODIGO = ' + IntToStr(codExtintor));
-    qaux.Open;
-
-    cdsItensRecarga.Insert;
-    cdsItensRecarga.FieldByName('RGS').AsVariant := dsCadastro.DataSet.FieldByName('RGS').AsString;
-
-    for i := 0 to qaux.FieldCount - 1 do
-      cdsItensRecarga.FieldByName(qaux.Fields[i].FieldName).AsVariant :=
-      qaux.FieldByName(qaux.Fields[i].FieldName).AsVariant;
-
-      if (StrToInt(dbgExtintorCliente.DataSource.DataSet.FieldByName('ULTIMA_VISITA').AsString) + 5) <=
-          StrToInt(FormatDateTime('yyyy',edDataEntrada.Date)) then
-        cdsItensRecarga.FieldByName('NIVEL_MANUTENCAO').AsInteger := 3
-      else if (dbgExtintorCliente.DataSource.DataSet.FieldByName('NIVEL_MANUTENCAO').AsInteger <> 3) then
-        cdsItensRecarga.FieldByName('NIVEL_MANUTENCAO').AsInteger := 2;
-
-    cdsItensRecarga.Post;
-    cdsItensRecarga.Transaction.CommitRetaining;
-
-    qaux.Close;
-
-  end;
-
-  //cdsItensRecarga.ApplyUpdates(-1);
-  cdsItensRecarga.Transaction.CommitRetaining;
-  ListaExtintores(codRgs);
-  cdsItensRecarga.Refresh;
-
-{
-  if codRgs <> '' then
-  begin
-
-    execDml(Format(ctDataTeste,[dsExtintorCliente.DataSet.FieldByName('CODIGO').AsString]));
-
-    if dsExtintorRGS2.DataSet.Locate('CODIGO',dsExtintorCliente.DataSet.FieldByName('CODIGO').AsVariant,[]) then
-    begin
-      //execDml(Format(ctDelete,[dsExtintorCliente.DataSet.FieldByName('CODIGO').AsString,
-      //                         codRgs]));
-      dsExtintorRGS2.DataSet.Delete
-    end else begin
-
-      dsExtintorRGS2.DataSet.Insert;
-
-      for i := 0 to dsExtintorCliente.DataSet.FieldCount - 1 do
-        dsExtintorRGS2.DataSet.Fields[i].AsVariant := dsExtintorCliente.DataSet.Fields[i].AsVariant;
-
-      if (StrToInt(dbgExtintorCliente.DataSource.DataSet.FieldByName('ULTIMA_VISITA').AsString) + 5) <=
-          StrToInt(FormatDateTime('yyyy',edDataEntrada.Date)) then
-        dsExtintorRGS2.DataSet.FieldByName('NIVEL_MANUTENCAO').AsInteger := 3
-      else if (dbgExtintorCliente.DataSource.DataSet.FieldByName('NIVEL_MANUTENCAO').AsInteger <> 3) then
-        dsExtintorRGS2.DataSet.FieldByName('NIVEL_MANUTENCAO').AsInteger := 2;
-
-      dsExtintorRGS2.DataSet.Post;
-
-      //execDml(Format(ctInsert,[dsExtintorCliente.DataSet.FieldByName('CODIGO').AsString,
-      //                         codRgs]));
-    end;
-    //ListaExtintores(codRgs);
-   // ListaExtintores(cdsCadastro.fieldByName('CODIGO').AsString);
-  end else
-    alert('Código RGS Vazio, procure o revendedor!');
-                                              }
-  dbgExtintorCliente.DataSource.DataSet.Next;
-  dbgExtintorCliente.DataSource.DataSet.Prior;
+  InseriExtintor(dbgExtintorCliente.DataSource.DataSet.FieldByName('codigo').AsInteger);
 end;
 
 procedure TFCadRgs.dbgRGSKeyDowvk_n(Sender: TObject; var Key: Word;
@@ -1305,6 +1209,112 @@ begin
     Exit;
   end;
 
+end;
+
+procedure TFCadRgs.InseriExtintor(codigo: integer);
+var
+  i : integer;
+  codExtintor : integer;
+Const
+  ctInsert =
+    'INSERT INTO'#10+
+    ' RGS_EXTINTOR'#10+
+    '    (RGS_EXTINTOR.CODIGO_EXTINTOR,'#10+
+    '     RGS_EXTINTOR.CODIGO_RGS)'#10+
+    'VALUES(%s,%s)';
+
+  ctDelete =
+    'DELETE FROM RGS_EXTINTOR'#10+
+    'WHERE'#10+
+    '(CODIGO_EXTINTOR = %s)AND(CODIGO_RGS = %s)';
+
+  ctSugereNilvel =
+    'UPDATE ESTINTOR SET NIVEL_MANUTENCAO = %s WHERE CODIGO = %s';
+
+  ctDataTeste =
+    'UPDATE ESTINTOR SET DATA_TESTE = NULL WHERE CODIGO = %s';
+
+begin
+  inherited;
+
+  if codRgs = '' then
+    exit;
+
+  codExtintor := codigo;
+
+  if cdsItensRecarga.Locate('CODIGO',codExtintor, []) then
+    cdsItensRecarga.Delete
+  else begin
+
+    qaux.Close;
+    qaux.SQL.Clear;
+    qaux.SQL.add('SELECT ESTINTOR.* FROM ESTINTOR WHERE CODIGO = ' + IntToStr(codExtintor));
+    qaux.Open;
+
+    cdsItensRecarga.Insert;
+    cdsItensRecarga.FieldByName('RGS').AsVariant := dsCadastro.DataSet.FieldByName('RGS').AsString;
+
+    for i := 0 to qaux.FieldCount - 1 do
+      if cdsItensRecarga.FindField(qaux.Fields[i].FieldName) <> nil then
+        cdsItensRecarga.FieldByName(qaux.Fields[i].FieldName).AsVariant :=
+        qaux.FieldByName(qaux.Fields[i].FieldName).AsVariant;
+
+      if (StrToInt(dbgExtintorCliente.DataSource.DataSet.FieldByName('ULTIMA_VISITA').AsString) + 5) <=
+          StrToInt(FormatDateTime('yyyy',edDataEntrada.Date)) then
+        cdsItensRecarga.FieldByName('NIVEL_MANUTENCAO').AsInteger := 3
+      else if (dbgExtintorCliente.DataSource.DataSet.FieldByName('NIVEL_MANUTENCAO').AsInteger <> 3) then
+      begin
+        if dbgExtintorCliente.DataSource.DataSet.FieldByName('TIPO').AsString <> 'CO2' then
+          cdsItensRecarga.FieldByName('NIVEL_MANUTENCAO').AsInteger := 2;
+      end;
+    cdsItensRecarga.Post;
+    cdsItensRecarga.Transaction.CommitRetaining;
+
+    qaux.Close;
+
+  end;
+
+  //cdsItensRecarga.ApplyUpdates(-1);
+  cdsItensRecarga.Transaction.CommitRetaining;
+  ListaExtintores(codRgs);
+  cdsItensRecarga.Refresh;
+
+  dbgExtintorCliente.DataSource.DataSet.Next;
+  dbgExtintorCliente.DataSource.DataSet.Prior;
+end;
+
+procedure TFCadRgs.InseriExtintor(codBarras: string);
+  function obterCodigoExtintor(codBarras : string):Integer;
+  var
+    fabricante : string;  // 3 digotos
+    numeroSerie: string;  // 0000000000
+    anoFabricacao: string;// dois digitos 00
+    tipoExtintor : string;// tres digitos CO2
+    capacidade : string;  // dois digitos Maximo 100 00
+    //0000 0000000000 00 000 00
+  begin
+    fabricante    := Copy(codBarras, 1, 4);
+    numeroSerie   := Copy(codBarras, 5, 10);
+    anoFabricacao := Copy(codBarras, 15, 2);
+    tipoExtintor  := Copy(codBarras, 17, 3);
+    capacidade    := Copy(codBarras, 20, 2);
+  end;
+var
+  Servico : TServico;
+begin
+  Servico := TServico.Create;
+  InseriExtintor(Servico.obterExtintor(codBarras).Codigo);
+  FreeAndNil(Servico);
+end;
+
+procedure TFCadRgs.edtCodigoBarrasChange(Sender: TObject);
+begin
+  inherited;
+  if Length(Trim(edtCodigoBarras.Text)) = 19  then
+  begin
+    InseriExtintor(Trim(edtCodigoBarras.Text));
+    edtCodigoBarras.Clear;
+  end;
 end;
 
 end.

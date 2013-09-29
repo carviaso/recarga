@@ -185,7 +185,7 @@ object FRGeralServico: TFRGeralServico
       end
       object rlEndereco: TRLLabel
         Left = 5
-        Top = 29
+        Top = 45
         Width = 290
         Height = 16
         Alignment = taCenter
@@ -199,7 +199,7 @@ object FRGeralServico: TFRGeralServico
       end
       object rlComplemento: TRLLabel
         Left = 5
-        Top = 45
+        Top = 61
         Width = 290
         Height = 16
         Alignment = taCenter
@@ -303,6 +303,20 @@ object FRGeralServico: TFRGeralServico
         Font.Height = -13
         Font.Name = 'Arial'
         Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlblCNPJ: TRLLabel
+        Left = 5
+        Top = 29
+        Width = 290
+        Height = 16
+        Alignment = taCenter
+        AutoSize = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
         ParentFont = False
       end
     end
